@@ -1,0 +1,133 @@
+[
+  {
+    "id": "task_mqomkqta_q2lor",
+    "status": "pending",
+    "notes": [],
+    "userId": "u_e1",
+    "positionId": "pos_1",
+    "triggerType": "required_cert_gap",
+    "triggerDescription": "岗位【安全工程师】缺少必修证书：消防安全培训",
+    "targetCourseId": "c_fire",
+    "actions": [
+      "notify",
+      "assign_course",
+      "assign_exam"
+    ],
+    "priority": 2,
+    "assignedToId": "u_hr1",
+    "dueDate": "2026-07-06T02:57:38.493Z",
+    "createdAt": "2026-06-22T02:57:38.494Z"
+  },
+  {
+    "id": "task_mqomkqta_svxfw",
+    "status": "pending",
+    "notes": [],
+    "userId": "u_e1",
+    "positionId": "pos_1",
+    "triggerType": "required_course_gap",
+    "triggerDescription": "岗位【安全工程师】缺少必修课程：消防安全培训",
+    "targetCourseId": "c_fire",
+    "actions": [
+      "notify",
+      "assign_course"
+    ],
+    "priority": 1,
+    "assignedToId": "u_hr1",
+    "dueDate": "2026-07-06T02:57:38.493Z",
+    "createdAt": "2026-06-22T02:57:38.494Z"
+  },
+  {
+    "id": "task_mqomkqta_aluhl",
+    "status": "pending",
+    "notes": [],
+    "userId": "u_e2",
+    "positionId": "pos_2",
+    "triggerType": "cert_expired",
+    "triggerDescription": "证书【质量管理体系】已过期 10 天",
+    "targetCourseId": "c_quality",
+    "targetCertificateId": "cert3",
+    "actions": [
+      "notify",
+      "manual_review",
+      "assign_exam"
+    ],
+    "priority": 3,
+    "assignedToId": "u_hr1",
+    "dueDate": "2026-06-29T02:57:38.493Z",
+    "createdAt": "2026-06-22T02:57:38.494Z"
+  },
+  {
+    "id": "task_mqomkqta_my436",
+    "status": "pending",
+    "notes": [],
+    "userId": "u_e3",
+    "positionId": "pos_1",
+    "triggerType": "required_cert_gap",
+    "triggerDescription": "岗位【安全工程师】缺少必修证书：安全生产基础",
+    "targetCourseId": "c_safety",
+    "actions": [
+      "notify",
+      "assign_course",
+      "assign_exam"
+    ],
+    "priority": 2,
+    "assignedToId": "u_hr1",
+    "dueDate": "2026-07-06T02:57:38.493Z",
+    "createdAt": "2026-06-22T02:57:38.494Z"
+  },
+  {
+    "id": "task_mqomkqta_bpurk",
+    "status": "pending",
+    "notes": [],
+    "userId": "u_e3",
+    "positionId": "pos_1",
+    "triggerType": "required_cert_gap",
+    "triggerDescription": "岗位【安全工程师】缺少必修证书：消防安全培训",
+    "targetCourseId": "c_fire",
+    "actions": [
+      "notify",
+      "assign_course",
+      "assign_exam"
+    ],
+    "priority": 2,
+    "assignedToId": "u_hr1",
+    "dueDate": "2026-07-06T02:57:38.493Z",
+    "createdAt": "2026-06-22T02:57:38.494Z"
+  },
+  {
+    "id": "task_mqomkqta_6spmn",
+    "status": "pending",
+    "notes": [],
+    "userId": "u_e3",
+    "positionId": "pos_1",
+    "triggerType": "required_course_gap",
+    "triggerDescription": "岗位【安全工程师】缺少必修课程：安全生产基础",
+    "targetCourseId": "c_safety",
+    "actions": [
+      "notify",
+      "assign_course"
+    ],
+    "priority": 1,
+    "assignedToId": "u_hr1",
+    "dueDate": "2026-07-06T02:57:38.493Z",
+    "createdAt": "2026-06-22T02:57:38.494Z"
+  },
+  {
+    "id": "task_mqomkqta_ak86t",
+    "status": "pending",
+    "notes": [],
+    "userId": "u_e3",
+    "positionId": "pos_1",
+    "triggerType": "required_course_gap",
+    "triggerDescription": "岗位【安全工程师】缺少必修课程：消防安全培训",
+    "targetCourseId": "c_fire",
+    "actions": [
+      "notify",
+      "assign_course"
+    ],
+    "priority": 1,
+    "assignedToId": "u_hr1",
+    "dueDate": "2026-07-06T02:57:38.493Z",
+    "createdAt": "2026-06-22T02:57:38.494Z"
+  }
+]

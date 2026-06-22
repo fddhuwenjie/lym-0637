@@ -3,7 +3,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import type {
   User, Position, Course, Question, Enrollment, ExamAttempt,
-  Certificate, Reminder, ExportHistory
+  Certificate, Reminder, ExportHistory,
+  InterventionRule, PositionCertConfig, InterventionTask, ReviewRecord
 } from '../../shared/types.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -19,11 +20,16 @@ export interface DataSchema {
   certificates: Certificate[];
   reminders: Reminder[];
   exportHistory: ExportHistory[];
+  interventionRules: InterventionRule[];
+  positionCertConfigs: PositionCertConfig[];
+  interventionTasks: InterventionTask[];
+  reviewRecords: ReviewRecord[];
 }
 
 const FILES: (keyof DataSchema)[] = [
   'users', 'positions', 'courses', 'questions', 'enrollments',
-  'examAttempts', 'certificates', 'reminders', 'exportHistory'
+  'examAttempts', 'certificates', 'reminders', 'exportHistory',
+  'interventionRules', 'positionCertConfigs', 'interventionTasks', 'reviewRecords'
 ];
 
 function ensureDataDir() {
@@ -204,6 +210,83 @@ function getDefaultData(): DataSchema {
       },
     ],
     exportHistory: [],
+    interventionRules: [
+      {
+        id: 'rule1',
+        triggerType: 'cert_expiring',
+        triggerValue: 30,
+        actions: ['notify', 'assign_course'],
+        description: '证书到期前30天触发：通知员工并分配复习课程',
+        enabled: true,
+        priority: 1,
+      },
+      {
+        id: 'rule2',
+        triggerType: 'cert_expiring',
+        triggerValue: 7,
+        actions: ['notify', 'schedule_review', 'manual_review'],
+        description: '证书到期前7天触发：紧急通知、安排复核并人工审核',
+        enabled: true,
+        priority: 2,
+      },
+      {
+        id: 'rule3',
+        triggerType: 'cert_expired',
+        actions: ['notify', 'manual_review', 'assign_exam'],
+        description: '证书过期触发：通知、人工审核并安排补考',
+        enabled: true,
+        priority: 3,
+      },
+      {
+        id: 'rule4',
+        triggerType: 'exam_fail_repeated',
+        triggerValue: 2,
+        actions: ['notify', 'assign_course', 'manual_review'],
+        description: '连续2次考试未通过触发：通知、重新分配学习、人工审核',
+        enabled: true,
+        priority: 2,
+      },
+      {
+        id: 'rule5',
+        triggerType: 'required_course_gap',
+        actions: ['notify', 'assign_course'],
+        description: '岗位必修课程缺口触发：通知并分配课程',
+        enabled: true,
+        priority: 1,
+      },
+      {
+        id: 'rule6',
+        triggerType: 'required_cert_gap',
+        actions: ['notify', 'assign_course', 'assign_exam'],
+        description: '岗位必修证书缺口触发：通知、分配课程与考试',
+        enabled: true,
+        priority: 2,
+      },
+    ],
+    positionCertConfigs: [
+      {
+        id: 'pcc1',
+        positionId: 'pos_1',
+        reviewCycleDays: 365,
+        riskLevel: 'high',
+        ruleIds: ['rule1', 'rule2', 'rule3', 'rule4', 'rule5', 'rule6'],
+        assignedReviewerIds: ['u_hr1'],
+        createdAt: past(60),
+        updatedAt: past(60),
+      },
+      {
+        id: 'pcc2',
+        positionId: 'pos_2',
+        reviewCycleDays: 730,
+        riskLevel: 'medium',
+        ruleIds: ['rule1', 'rule3', 'rule4', 'rule5', 'rule6'],
+        assignedReviewerIds: ['u_hr1'],
+        createdAt: past(60),
+        updatedAt: past(60),
+      },
+    ],
+    interventionTasks: [],
+    reviewRecords: [],
   };
 }
 
@@ -243,6 +326,10 @@ export function loadAllData(): DataSchema {
     certificates: loadFile('certificates'),
     reminders: loadFile('reminders'),
     exportHistory: loadFile('exportHistory'),
+    interventionRules: loadFile('interventionRules'),
+    positionCertConfigs: loadFile('positionCertConfigs'),
+    interventionTasks: loadFile('interventionTasks'),
+    reviewRecords: loadFile('reviewRecords'),
   };
 }
 

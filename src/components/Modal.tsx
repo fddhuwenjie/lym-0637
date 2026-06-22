@@ -9,6 +9,7 @@ interface ModalProps {
   onOk?: () => void
   okText?: string
   cancelText?: string
+  hideCancel?: boolean
   width?: string | number
   children: React.ReactNode
   footer?: React.ReactNode
@@ -22,6 +23,7 @@ export default function Modal({
   onOk,
   okText = '确定',
   cancelText = '取消',
+  hideCancel = false,
   width = 520,
   children,
   footer,
@@ -71,12 +73,14 @@ export default function Modal({
           footer
         ) : (
           <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-200">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 rounded-md text-sm text-slate-600 bg-white border border-slate-300 hover:bg-slate-50 transition-colors"
-            >
-              {cancelText}
-            </button>
+            {!hideCancel && (
+              <button
+                onClick={onClose}
+                className="px-4 py-2 rounded-md text-sm text-slate-600 bg-white border border-slate-300 hover:bg-slate-50 transition-colors"
+              >
+                {cancelText}
+              </button>
+            )}
             {onOk && (
               <button
                 onClick={onOk}

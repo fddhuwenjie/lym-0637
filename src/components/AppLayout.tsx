@@ -17,6 +17,9 @@ import {
   GraduationCap,
   User,
   Medal,
+  ShieldCheck,
+  AlertTriangle,
+  History,
 } from 'lucide-react';
 
 const hrNavItems = [
@@ -25,8 +28,11 @@ const hrNavItems = [
   { path: '/hr/questions', label: '题库管理', icon: HelpCircle },
   { path: '/hr/positions', label: '岗位管理', icon: Briefcase },
   { path: '/hr/cert-config', label: '证书配置', icon: Award },
+  { path: '/hr/cert-review-config', label: '复核配置', icon: ShieldCheck },
   { path: '/hr/compliance', label: '员工达标看板', icon: ClipboardCheck },
   { path: '/hr/exam-records', label: '考试明细', icon: FileText },
+  { path: '/hr/intervention-tasks', label: '干预任务', icon: AlertTriangle },
+  { path: '/hr/review-records', label: '复核记录', icon: History },
   { path: '/hr/export', label: '数据导出', icon: Download },
 ];
 

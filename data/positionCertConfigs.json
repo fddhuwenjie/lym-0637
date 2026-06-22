@@ -1,0 +1,39 @@
+[
+  {
+    "id": "pcc1",
+    "positionId": "pos_1",
+    "reviewCycleDays": 365,
+    "riskLevel": "high",
+    "ruleIds": [
+      "rule1",
+      "rule2",
+      "rule3",
+      "rule4",
+      "rule5",
+      "rule6"
+    ],
+    "assignedReviewerIds": [
+      "u_hr1"
+    ],
+    "createdAt": "2026-04-23T02:46:27.460Z",
+    "updatedAt": "2026-04-23T02:46:27.460Z"
+  },
+  {
+    "id": "pcc2",
+    "positionId": "pos_2",
+    "reviewCycleDays": 730,
+    "riskLevel": "medium",
+    "ruleIds": [
+      "rule1",
+      "rule3",
+      "rule4",
+      "rule5",
+      "rule6"
+    ],
+    "assignedReviewerIds": [
+      "u_hr1"
+    ],
+    "createdAt": "2026-04-23T02:46:27.460Z",
+    "updatedAt": "2026-04-23T02:46:27.460Z"
+  }
+]

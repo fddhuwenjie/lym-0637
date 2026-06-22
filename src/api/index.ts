@@ -11,6 +11,10 @@ import type {
   Reminder,
   ExportHistory,
   ComplianceRecord,
+  InterventionRule,
+  PositionCertConfig,
+  InterventionTask,
+  ReviewRecord,
 } from '../../shared/types'
 
 export const authApi = {
@@ -90,6 +94,73 @@ export const exportApi = {
   exportData: (type: string, filters?: Record<string, unknown>) =>
     apiClient.post<{ url: string; filename: string }>('/export', { type, filters }),
   getExportHistory: () => apiClient.get<ExportHistory[]>('/export/history'),
+  downloadExport: (type: string, createdBy?: string) => {
+    const query = createdBy ? `?type=${type}&createdBy=${createdBy}` : `?type=${type}`
+    window.open(`/api/export${query}`, '_blank')
+  },
+}
+
+export const interventionRuleApi = {
+  getRules: () => apiClient.get<InterventionRule[]>('/intervention-rules'),
+  createRule: (data: Omit<InterventionRule, 'id'>) =>
+    apiClient.post<InterventionRule>('/intervention-rules', data),
+  updateRule: (id: string, data: Partial<Omit<InterventionRule, 'id'>>) =>
+    apiClient.put<InterventionRule>(`/intervention-rules/${id}`, data),
+  deleteRule: (id: string) =>
+    apiClient.delete<void>(`/intervention-rules/${id}`),
+}
+
+export const positionCertConfigApi = {
+  getConfigs: () => apiClient.get<PositionCertConfig[]>('/position-cert-configs'),
+  getConfigByPosition: (positionId: string) =>
+    apiClient.get<PositionCertConfig>(`/position-cert-configs/${positionId}`),
+  createConfig: (data: Omit<PositionCertConfig, 'id' | 'createdAt' | 'updatedAt'>) =>
+    apiClient.post<PositionCertConfig>('/position-cert-configs', data),
+  updateConfig: (id: string, data: Partial<Omit<PositionCertConfig, 'id' | 'createdAt'>>) =>
+    apiClient.put<PositionCertConfig>(`/position-cert-configs/${id}`, data),
+  deleteConfig: (id: string) =>
+    apiClient.delete<void>(`/position-cert-configs/${id}`),
+}
+
+export const interventionTaskApi = {
+  getTasks: (params?: {
+    userId?: string
+    positionId?: string
+    status?: string
+    triggerType?: string
+  }) => apiClient.get<InterventionTask[]>('/intervention-tasks', params),
+  getTask: (id: string) => apiClient.get<InterventionTask>(`/intervention-tasks/${id}`),
+  detectAndGenerate: (params?: { positionId?: string; userId?: string }) =>
+    apiClient.post<{ generatedCount: number; tasks: InterventionTask[] }>(
+      '/intervention-tasks/detect',
+      params || {}
+    ),
+  createTask: (data: Partial<InterventionTask> & {
+    userId: string
+    triggerType: any
+    triggerDescription: string
+    actions: any[]
+    priority: number
+  }) => apiClient.post<InterventionTask>('/intervention-tasks', data),
+  updateTask: (id: string, data: any) =>
+    apiClient.put<InterventionTask>(`/intervention-tasks/${id}`, data),
+  deleteTask: (id: string) =>
+    apiClient.delete<void>(`/intervention-tasks/${id}`),
+}
+
+export const reviewRecordApi = {
+  getRecords: (params?: {
+    userId?: string
+    positionId?: string
+    reviewerId?: string
+    result?: string
+    taskId?: string
+  }) => apiClient.get<ReviewRecord[]>('/review-records', params),
+  getRecord: (id: string) => apiClient.get<ReviewRecord>(`/review-records/${id}`),
+  createRecord: (data: Omit<ReviewRecord, 'id' | 'createdAt'>) =>
+    apiClient.post<ReviewRecord>('/review-records', data),
+  updateRecord: (id: string, data: Partial<Omit<ReviewRecord, 'id' | 'createdAt'>>) =>
+    apiClient.put<ReviewRecord>(`/review-records/${id}`, data),
 }
 
 export * from './client'

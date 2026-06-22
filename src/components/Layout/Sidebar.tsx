@@ -16,6 +16,9 @@ import {
   ChevronDown,
   Menu,
   X,
+  ShieldCheck,
+  AlertTriangle,
+  History,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -32,9 +35,12 @@ const hrMenu: MenuItem[] = [
   { label: '课程管理', icon: <BookOpen size={20} />, href: '/hr/courses' },
   { label: '题库管理', icon: <HelpCircle size={20} />, href: '/hr/questions' },
   { label: '岗位管理', icon: <Briefcase size={20} />, href: '/hr/positions' },
-  { label: '证书配置', icon: <Award size={20} />, href: '/hr/certificates' },
+  { label: '证书配置', icon: <Award size={20} />, href: '/hr/cert-config' },
+  { label: '复核配置', icon: <ShieldCheck size={20} />, href: '/hr/cert-review-config' },
   { label: '员工达标看板', icon: <Users size={20} />, href: '/hr/compliance' },
-  { label: '考试明细', icon: <FileText size={20} />, href: '/hr/exams' },
+  { label: '考试明细', icon: <FileText size={20} />, href: '/hr/exam-records' },
+  { label: '干预任务', icon: <AlertTriangle size={20} />, href: '/hr/intervention-tasks' },
+  { label: '复核记录', icon: <History size={20} />, href: '/hr/review-records' },
   { label: '数据导出', icon: <Download size={20} />, href: '/hr/export' },
 ];
 

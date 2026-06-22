@@ -16,6 +16,15 @@ import type {
   ExamAnswer,
   CertificateStatus,
   ReminderType,
+  InterventionRule,
+  PositionCertConfig,
+  InterventionTask,
+  ReviewRecord,
+  InterventionTriggerType,
+  InterventionActionType,
+  InterventionTaskStatus,
+  ReviewResult,
+  CertificateRiskLevel,
 } from '../../shared/types.js';
 
 const ONE_DAY_MS = 86400000;
@@ -408,6 +417,485 @@ export function toCSV(rows: Record<string, any>[]): string {
     lines.push(headers.map((h) => escape(row[h])).join(','));
   }
   return lines.join('\n');
+}
+
+function enrichPositionCertConfig(
+  data: DataSchema,
+  config: PositionCertConfig
+): PositionCertConfig & { positionName?: string } {
+  const position = data.positions.find((p) => p.id === config.positionId);
+  return { ...config, positionName: position?.name };
+}
+
+export function getAllPositionCertConfigs(
+  data: DataSchema
+): (PositionCertConfig & { positionName?: string })[] {
+  return data.positionCertConfigs.map((c) => enrichPositionCertConfig(data, c));
+}
+
+export function createPositionCertConfig(
+  data: DataSchema,
+  input: Omit<PositionCertConfig, 'id' | 'createdAt' | 'updatedAt'>
+): PositionCertConfig {
+  const now = nowISO();
+  const config: PositionCertConfig = {
+    id: genId('pcc'),
+    ...input,
+    createdAt: now,
+    updatedAt: now,
+  };
+  data.positionCertConfigs.push(config);
+  return config;
+}
+
+export function updatePositionCertConfig(
+  data: DataSchema,
+  id: string,
+  patch: Partial<Omit<PositionCertConfig, 'id' | 'createdAt'>>
+): PositionCertConfig | null {
+  const config = data.positionCertConfigs.find((c) => c.id === id);
+  if (!config) return null;
+  Object.assign(config, patch, { updatedAt: nowISO() });
+  return config;
+}
+
+export function deletePositionCertConfig(data: DataSchema, id: string): boolean {
+  const idx = data.positionCertConfigs.findIndex((c) => c.id === id);
+  if (idx === -1) return false;
+  data.positionCertConfigs.splice(idx, 1);
+  return true;
+}
+
+export function getAllInterventionRules(data: DataSchema): InterventionRule[] {
+  return [...data.interventionRules].sort((a, b) => a.priority - b.priority);
+}
+
+export function createInterventionRule(
+  data: DataSchema,
+  input: Omit<InterventionRule, 'id'>
+): InterventionRule {
+  const rule: InterventionRule = {
+    id: genId('rule'),
+    ...input,
+  };
+  data.interventionRules.push(rule);
+  return rule;
+}
+
+export function updateInterventionRule(
+  data: DataSchema,
+  id: string,
+  patch: Partial<Omit<InterventionRule, 'id'>>
+): InterventionRule | null {
+  const rule = data.interventionRules.find((r) => r.id === id);
+  if (!rule) return null;
+  Object.assign(rule, patch);
+  return rule;
+}
+
+export function deleteInterventionRule(data: DataSchema, id: string): boolean {
+  const idx = data.interventionRules.findIndex((r) => r.id === id);
+  if (idx === -1) return false;
+  data.interventionRules.splice(idx, 1);
+  return true;
+}
+
+function enrichInterventionTask(
+  data: DataSchema,
+  task: InterventionTask
+): InterventionTask {
+  const user = data.users.find((u) => u.id === task.userId);
+  const position = task.positionId
+    ? data.positions.find((p) => p.id === task.positionId)
+    : undefined;
+  const course = task.targetCourseId
+    ? data.courses.find((c) => c.id === task.targetCourseId)
+    : undefined;
+  const reviewer = task.assignedToId
+    ? data.users.find((u) => u.id === task.assignedToId)
+    : undefined;
+  return {
+    ...task,
+    userName: user?.name,
+    positionName: position?.name,
+    targetCourseName: course?.name,
+    assignedToName: reviewer?.name,
+  };
+}
+
+export function getAllInterventionTasks(
+  data: DataSchema
+): InterventionTask[] {
+  refreshAllCertificateStatuses(data);
+  return data.interventionTasks
+    .map((t) => enrichInterventionTask(data, t))
+    .sort((a, b) => {
+      if (a.priority !== b.priority) return b.priority - a.priority;
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+}
+
+export function createInterventionTask(
+  data: DataSchema,
+  input: Omit<InterventionTask, 'id' | 'createdAt' | 'notes' | 'status'> & {
+    status?: InterventionTaskStatus;
+  }
+): InterventionTask {
+  const task: InterventionTask = {
+    id: genId('task'),
+    status: 'pending',
+    notes: [],
+    ...input,
+    createdAt: nowISO(),
+  };
+  data.interventionTasks.push(task);
+  return enrichInterventionTask(data, task);
+}
+
+export function updateInterventionTask(
+  data: DataSchema,
+  id: string,
+  patch: Partial<Omit<InterventionTask, 'id' | 'createdAt'>> & {
+    addNote?: string;
+  }
+): InterventionTask | null {
+  const task = data.interventionTasks.find((t) => t.id === id);
+  if (!task) return null;
+  if (patch.addNote) {
+    task.notes.push(`[${nowISO()}] ${patch.addNote}`);
+    delete (patch as any).addNote;
+  }
+  if (patch.status === 'completed' && !task.completedAt) {
+    patch.completedAt = nowISO();
+  }
+  Object.assign(task, patch);
+  return enrichInterventionTask(data, task);
+}
+
+export function deleteInterventionTask(data: DataSchema, id: string): boolean {
+  const idx = data.interventionTasks.findIndex((t) => t.id === id);
+  if (idx === -1) return false;
+  data.interventionTasks.splice(idx, 1);
+  return true;
+}
+
+function enrichReviewRecord(
+  data: DataSchema,
+  record: ReviewRecord
+): ReviewRecord {
+  const user = data.users.find((u) => u.id === record.userId);
+  const position = record.positionId
+    ? data.positions.find((p) => p.id === record.positionId)
+    : undefined;
+  const course = record.courseId
+    ? data.courses.find((c) => c.id === record.courseId)
+    : undefined;
+  const reviewer = record.reviewerId
+    ? data.users.find((u) => u.id === record.reviewerId)
+    : undefined;
+  return {
+    ...record,
+    userName: user?.name,
+    positionName: position?.name,
+    courseName: course?.name,
+    reviewerName: reviewer?.name,
+  };
+}
+
+export function getAllReviewRecords(data: DataSchema): ReviewRecord[] {
+  return data.reviewRecords
+    .map((r) => enrichReviewRecord(data, r))
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+}
+
+export function createReviewRecord(
+  data: DataSchema,
+  input: Omit<ReviewRecord, 'id' | 'createdAt'>
+): ReviewRecord {
+  const record: ReviewRecord = {
+    id: genId('rev'),
+    ...input,
+    createdAt: nowISO(),
+  };
+  data.reviewRecords.push(record);
+  return enrichReviewRecord(data, record);
+}
+
+export function updateReviewRecord(
+  data: DataSchema,
+  id: string,
+  patch: Partial<Omit<ReviewRecord, 'id' | 'createdAt'>>
+): ReviewRecord | null {
+  const record = data.reviewRecords.find((r) => r.id === id);
+  if (!record) return null;
+  Object.assign(record, patch);
+  return enrichReviewRecord(data, record);
+}
+
+interface DetectOptions {
+  positionId?: string;
+  userId?: string;
+}
+
+export function detectAndGenerateInterventions(
+  data: DataSchema,
+  options: DetectOptions = {}
+): InterventionTask[] {
+  refreshAllCertificateStatuses(data);
+  const generatedTasks: InterventionTask[] = [];
+  const today = nowISO();
+
+  const existingKeys = new Set(
+    data.interventionTasks
+      .filter((t) => t.status !== 'completed' && t.status !== 'cancelled')
+      .map((t) => `${t.userId}_${t.triggerType}_${t.targetCourseId || t.targetCertificateId || 'general'}`)
+  );
+
+  const usersToCheck = options.userId
+    ? data.users.filter((u) => u.id === options.userId)
+    : data.users.filter((u) => u.role === 'employee');
+
+  for (const user of usersToCheck) {
+    if (!user.positionId) continue;
+    if (options.positionId && user.positionId !== options.positionId) continue;
+
+    const position = data.positions.find((p) => p.id === user.positionId);
+    if (!position) continue;
+
+    const config = data.positionCertConfigs.find(
+      (c) => c.positionId === user.positionId
+    );
+    const enabledRuleMap = new Map<InterventionTriggerType, InterventionRule[]>();
+    if (config) {
+      for (const ruleId of config.ruleIds) {
+        const rule = data.interventionRules.find(
+          (r) => r.id === ruleId && r.enabled
+        );
+        if (rule) {
+          const arr = enabledRuleMap.get(rule.triggerType) || [];
+          arr.push(rule);
+          enabledRuleMap.set(rule.triggerType, arr);
+        }
+      }
+    }
+
+    const riskLevel = config?.riskLevel ?? 'low';
+    const reviewerId =
+      config?.assignedReviewerIds?.[0] || data.users.find((u) => u.role === 'hr')?.id;
+
+    const userCerts = data.certificates
+      .filter((c) => c.userId === user.id)
+      .sort((a, b) => b.version - a.version);
+
+    const latestCertByCourse = new Map<string, Certificate>();
+    for (const cert of userCerts) {
+      if (!latestCertByCourse.has(cert.courseId)) {
+        latestCertByCourse.set(cert.courseId, cert);
+      }
+    }
+
+    const requiredCertCourseIds = position.requiredCertificateCourseIds || [];
+    for (const courseId of requiredCertCourseIds) {
+      const cert = latestCertByCourse.get(courseId);
+      const course = data.courses.find((c) => c.id === courseId);
+      if (!cert) {
+        const rules = enabledRuleMap.get('required_cert_gap') || [];
+        for (const rule of rules) {
+          const key = `${user.id}_required_cert_gap_${courseId}`;
+          if (!existingKeys.has(key)) {
+            const task = createInterventionTask(data, {
+              userId: user.id,
+              positionId: position.id,
+              triggerType: 'required_cert_gap',
+              triggerDescription: `岗位【${position.name}】缺少必修证书：${course?.name || courseId}`,
+              targetCourseId: courseId,
+              targetCertificateId: undefined,
+              actions: rule.actions,
+              priority: rule.priority,
+              assignedToId: reviewerId,
+              dueDate: addDaysISO(today, 14),
+            });
+            generatedTasks.push(task);
+            existingKeys.add(key);
+          }
+        }
+        continue;
+      }
+
+      const diffDays = Math.ceil(
+        (new Date(cert.expiresAt).getTime() - new Date(today).getTime()) / ONE_DAY_MS
+      );
+
+      if (diffDays < 0) {
+        const rules = enabledRuleMap.get('cert_expired') || [];
+        for (const rule of rules) {
+          const key = `${user.id}_cert_expired_${cert.id}`;
+          if (!existingKeys.has(key)) {
+            const task = createInterventionTask(data, {
+              userId: user.id,
+              positionId: position.id,
+              triggerType: 'cert_expired',
+              triggerDescription: `证书【${course?.name || courseId}】已过期 ${Math.abs(diffDays)} 天`,
+              targetCourseId: courseId,
+              targetCertificateId: cert.id,
+              actions: rule.actions,
+              priority: rule.priority,
+              assignedToId: reviewerId,
+              dueDate: addDaysISO(today, 7),
+            });
+            generatedTasks.push(task);
+            existingKeys.add(key);
+          }
+        }
+      } else {
+        const expiringRules = enabledRuleMap.get('cert_expiring') || [];
+        for (const rule of expiringRules) {
+          const threshold = rule.triggerValue ?? 30;
+          if (diffDays <= threshold) {
+            const key = `${user.id}_cert_expiring_${cert.id}_${threshold}`;
+            if (!existingKeys.has(key)) {
+              const task = createInterventionTask(data, {
+                userId: user.id,
+                positionId: position.id,
+                triggerType: 'cert_expiring',
+                triggerDescription: `证书【${course?.name || courseId}】将在 ${diffDays} 天后到期`,
+                targetCourseId: courseId,
+                targetCertificateId: cert.id,
+                actions: rule.actions,
+                priority: rule.priority,
+                assignedToId: reviewerId,
+                dueDate: addDaysISO(today, threshold),
+              });
+              generatedTasks.push(task);
+              existingKeys.add(key);
+            }
+          }
+        }
+      }
+    }
+
+    const requiredCourseIds = position.requiredCourseIds || [];
+    for (const courseId of requiredCourseIds) {
+      const latestPassed = getLatestPassedAttempt(data, user.id, courseId);
+      if (!latestPassed) {
+        const rules = enabledRuleMap.get('required_course_gap') || [];
+        for (const rule of rules) {
+          const key = `${user.id}_required_course_gap_${courseId}`;
+          if (!existingKeys.has(key)) {
+            const course = data.courses.find((c) => c.id === courseId);
+            const task = createInterventionTask(data, {
+              userId: user.id,
+              positionId: position.id,
+              triggerType: 'required_course_gap',
+              triggerDescription: `岗位【${position.name}】缺少必修课程：${course?.name || courseId}`,
+              targetCourseId: courseId,
+              actions: rule.actions,
+              priority: rule.priority,
+              assignedToId: reviewerId,
+              dueDate: addDaysISO(today, 14),
+            });
+            generatedTasks.push(task);
+            existingKeys.add(key);
+          }
+        }
+      }
+    }
+
+    const failRules = enabledRuleMap.get('exam_fail_repeated') || [];
+    for (const courseId of [...requiredCourseIds, ...requiredCertCourseIds]) {
+      const attempts = data.examAttempts
+        .filter(
+          (a) =>
+            a.userId === user.id &&
+            a.courseId === courseId &&
+            a.submitted &&
+            !a.passed
+        )
+        .sort(
+          (a, b) =>
+            new Date(b.submittedAt!).getTime() - new Date(a.submittedAt!).getTime()
+        );
+      for (const rule of failRules) {
+        const threshold = rule.triggerValue ?? 2;
+        if (attempts.length >= threshold) {
+          const latestPassed = getLatestPassedAttempt(data, user.id, courseId);
+          if (!latestPassed) {
+            const key = `${user.id}_exam_fail_repeated_${courseId}`;
+            if (!existingKeys.has(key)) {
+              const course = data.courses.find((c) => c.id === courseId);
+              const task = createInterventionTask(data, {
+                userId: user.id,
+                positionId: position.id,
+                triggerType: 'exam_fail_repeated',
+                triggerDescription: `课程【${course?.name || courseId}】已连续 ${attempts.length} 次考试未通过`,
+                targetCourseId: courseId,
+                actions: rule.actions,
+                priority: rule.priority,
+                assignedToId: reviewerId,
+                dueDate: addDaysISO(today, 10),
+              });
+              generatedTasks.push(task);
+              existingKeys.add(key);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return generatedTasks;
+}
+
+export function buildInterventionExportRows(
+  data: DataSchema
+): Record<string, any>[] {
+  const tasks = getAllInterventionTasks(data);
+  return tasks.map((t) => ({
+    id: t.id,
+    userId: t.userId,
+    userName: t.userName ?? '',
+    positionId: t.positionId ?? '',
+    positionName: t.positionName ?? '',
+    triggerType: t.triggerType,
+    triggerDescription: t.triggerDescription,
+    targetCourseId: t.targetCourseId ?? '',
+    targetCourseName: t.targetCourseName ?? '',
+    actions: t.actions.join(';'),
+    priority: t.priority,
+    status: t.status,
+    assignedToId: t.assignedToId ?? '',
+    assignedToName: t.assignedToName ?? '',
+    dueDate: t.dueDate ?? '',
+    completedAt: t.completedAt ?? '',
+    createdAt: t.createdAt,
+    notes: t.notes.join(' | '),
+  }));
+}
+
+export function buildReviewExportRows(
+  data: DataSchema
+): Record<string, any>[] {
+  const records = getAllReviewRecords(data);
+  return records.map((r) => ({
+    id: r.id,
+    userId: r.userId,
+    userName: r.userName ?? '',
+    positionId: r.positionId ?? '',
+    positionName: r.positionName ?? '',
+    certificateId: r.certificateId ?? '',
+    courseId: r.courseId ?? '',
+    courseName: r.courseName ?? '',
+    reviewerId: r.reviewerId ?? '',
+    reviewerName: r.reviewerName ?? '',
+    reviewType: r.reviewType,
+    result: r.result,
+    riskLevel: r.riskLevel,
+    reviewDate: r.reviewDate,
+    nextReviewDate: r.nextReviewDate ?? '',
+    comments: r.comments,
+    taskId: r.taskId ?? '',
+    createdAt: r.createdAt,
+  }));
 }
 
 export { nowISO, addDaysISO, daysBetween, loadAllData, saveAllData, genId };

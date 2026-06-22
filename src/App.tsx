@@ -13,6 +13,9 @@ import CertificateConfig from '@/pages/hr/CertificateConfig';
 import ComplianceBoard from '@/pages/hr/ComplianceBoard';
 import ExamRecords from '@/pages/hr/ExamRecords';
 import DataExport from '@/pages/hr/DataExport';
+import PositionCertConfig from '@/pages/hr/PositionCertConfig';
+import InterventionTasks from '@/pages/hr/InterventionTasks';
+import ReviewRecords from '@/pages/hr/ReviewRecords';
 
 function RequireAuth({ children, allowedRoles }: { children: JSX.Element; allowedRoles: string[] }) {
   const { user, role } = useAuthStore();
@@ -108,6 +111,30 @@ function AppRoutes() {
         element={
           <RequireAuth allowedRoles={['hr']}>
             <DataExport />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/hr/cert-review-config"
+        element={
+          <RequireAuth allowedRoles={['hr']}>
+            <PositionCertConfig />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/hr/intervention-tasks"
+        element={
+          <RequireAuth allowedRoles={['hr']}>
+            <InterventionTasks />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/hr/review-records"
+        element={
+          <RequireAuth allowedRoles={['hr']}>
+            <ReviewRecords />
           </RequireAuth>
         }
       />

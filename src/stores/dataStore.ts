@@ -10,6 +10,10 @@ import type {
   Reminder,
   ExportHistory,
   ComplianceRecord,
+  InterventionRule,
+  PositionCertConfig,
+  InterventionTask,
+  ReviewRecord,
 } from '../../shared/types'
 import {
   userApi,
@@ -22,6 +26,10 @@ import {
   reminderApi,
   complianceApi,
   exportApi,
+  interventionRuleApi,
+  positionCertConfigApi,
+  interventionTaskApi,
+  reviewRecordApi,
 } from '../api'
 
 interface DataState {
@@ -35,6 +43,10 @@ interface DataState {
   reminders: Reminder[]
   compliance: ComplianceRecord[]
   exportHistory: ExportHistory[]
+  interventionRules: InterventionRule[]
+  positionCertConfigs: PositionCertConfig[]
+  interventionTasks: InterventionTask[]
+  reviewRecords: ReviewRecord[]
 
   loading: Record<string, boolean>
   errors: Record<string, string | null>
@@ -49,6 +61,21 @@ interface DataState {
   loadReminders: (userId?: string) => Promise<void>
   loadCompliance: () => Promise<void>
   loadExportHistory: () => Promise<void>
+  loadInterventionRules: () => Promise<void>
+  loadPositionCertConfigs: () => Promise<void>
+  loadInterventionTasks: (params?: {
+    userId?: string
+    positionId?: string
+    status?: string
+    triggerType?: string
+  }) => Promise<void>
+  loadReviewRecords: (params?: {
+    userId?: string
+    positionId?: string
+    reviewerId?: string
+    result?: string
+    taskId?: string
+  }) => Promise<void>
   loadAll: () => Promise<void>
 
   setUsers: (users: User[]) => void
@@ -72,6 +99,10 @@ const initialLoading: Record<string, boolean> = {
   reminders: false,
   compliance: false,
   exportHistory: false,
+  interventionRules: false,
+  positionCertConfigs: false,
+  interventionTasks: false,
+  reviewRecords: false,
 }
 
 const initialErrors: Record<string, string | null> = {
@@ -85,6 +116,10 @@ const initialErrors: Record<string, string | null> = {
   reminders: null,
   compliance: null,
   exportHistory: null,
+  interventionRules: null,
+  positionCertConfigs: null,
+  interventionTasks: null,
+  reviewRecords: null,
 }
 
 export const useDataStore = create<DataState>((set, get) => ({
@@ -98,6 +133,10 @@ export const useDataStore = create<DataState>((set, get) => ({
   reminders: [],
   compliance: [],
   exportHistory: [],
+  interventionRules: [],
+  positionCertConfigs: [],
+  interventionTasks: [],
+  reviewRecords: [],
   loading: { ...initialLoading },
   errors: { ...initialErrors },
 
@@ -291,6 +330,82 @@ export const useDataStore = create<DataState>((set, get) => ({
     }
   },
 
+  loadInterventionRules: async () => {
+    set((state) => ({
+      loading: { ...state.loading, interventionRules: true },
+      errors: { ...state.errors, interventionRules: null },
+    }))
+    const response = await interventionRuleApi.getRules()
+    if (response.success && response.data) {
+      set((state) => ({
+        interventionRules: response.data!,
+        loading: { ...state.loading, interventionRules: false },
+      }))
+    } else {
+      set((state) => ({
+        errors: { ...state.errors, interventionRules: response.error || 'Failed to load intervention rules' },
+        loading: { ...state.loading, interventionRules: false },
+      }))
+    }
+  },
+
+  loadPositionCertConfigs: async () => {
+    set((state) => ({
+      loading: { ...state.loading, positionCertConfigs: true },
+      errors: { ...state.errors, positionCertConfigs: null },
+    }))
+    const response = await positionCertConfigApi.getConfigs()
+    if (response.success && response.data) {
+      set((state) => ({
+        positionCertConfigs: response.data!,
+        loading: { ...state.loading, positionCertConfigs: false },
+      }))
+    } else {
+      set((state) => ({
+        errors: { ...state.errors, positionCertConfigs: response.error || 'Failed to load position cert configs' },
+        loading: { ...state.loading, positionCertConfigs: false },
+      }))
+    }
+  },
+
+  loadInterventionTasks: async (params) => {
+    set((state) => ({
+      loading: { ...state.loading, interventionTasks: true },
+      errors: { ...state.errors, interventionTasks: null },
+    }))
+    const response = await interventionTaskApi.getTasks(params)
+    if (response.success && response.data) {
+      set((state) => ({
+        interventionTasks: response.data!,
+        loading: { ...state.loading, interventionTasks: false },
+      }))
+    } else {
+      set((state) => ({
+        errors: { ...state.errors, interventionTasks: response.error || 'Failed to load intervention tasks' },
+        loading: { ...state.loading, interventionTasks: false },
+      }))
+    }
+  },
+
+  loadReviewRecords: async (params) => {
+    set((state) => ({
+      loading: { ...state.loading, reviewRecords: true },
+      errors: { ...state.errors, reviewRecords: null },
+    }))
+    const response = await reviewRecordApi.getRecords(params)
+    if (response.success && response.data) {
+      set((state) => ({
+        reviewRecords: response.data!,
+        loading: { ...state.loading, reviewRecords: false },
+      }))
+    } else {
+      set((state) => ({
+        errors: { ...state.errors, reviewRecords: response.error || 'Failed to load review records' },
+        loading: { ...state.loading, reviewRecords: false },
+      }))
+    }
+  },
+
   loadAll: async () => {
     await Promise.all([
       get().loadUsers(),
@@ -298,6 +413,10 @@ export const useDataStore = create<DataState>((set, get) => ({
       get().loadPositions(),
       get().loadCompliance(),
       get().loadExportHistory(),
+      get().loadInterventionRules(),
+      get().loadPositionCertConfigs(),
+      get().loadInterventionTasks(),
+      get().loadReviewRecords(),
     ])
   },
 

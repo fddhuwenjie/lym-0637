@@ -10,6 +10,8 @@ import {
   BookOpen,
   AlertTriangle,
   Clock,
+  ShieldCheck,
+  History,
 } from 'lucide-react'
 
 export default function HRDashboard() {
@@ -20,12 +22,16 @@ export default function HRDashboard() {
     enrollments,
     positions,
     reminders,
+    interventionTasks,
+    reviewRecords,
     loadCompliance,
     loadCertificates,
     loadExams,
     loadEnrollments,
     loadPositions,
     loadReminders,
+    loadInterventionTasks,
+    loadReviewRecords,
   } = useDataStore()
 
   useEffect(() => {
@@ -35,6 +41,8 @@ export default function HRDashboard() {
     loadEnrollments()
     loadPositions()
     loadReminders()
+    loadInterventionTasks()
+    loadReviewRecords()
   }, [
     loadCompliance,
     loadCertificates,
@@ -42,6 +50,8 @@ export default function HRDashboard() {
     loadEnrollments,
     loadPositions,
     loadReminders,
+    loadInterventionTasks,
+    loadReviewRecords,
   ])
 
   const stats = useMemo(() => {
@@ -67,13 +77,25 @@ export default function HRDashboard() {
         ? Math.round((completedEnrollments.length / enrollments.length) * 100)
         : 0
 
+    const pendingInterventions = interventionTasks.filter(
+      (t) => t.status === 'pending' || t.status === 'in_progress'
+    ).length
+
+    const reviewPassCount = reviewRecords.filter((r) => r.result === 'pass').length
+    const reviewPassRate =
+      reviewRecords.length > 0
+        ? Math.round((reviewPassCount / reviewRecords.length) * 100)
+        : 0
+
     return {
       employeeComplianceRate: `${employeeComplianceRate}%`,
       expiringCount,
       examPassRate: `${examPassRate}%`,
       courseCompletionRate: `${courseCompletionRate}%`,
+      pendingInterventions,
+      reviewPassRate: `${reviewPassRate}%`,
     }
-  }, [compliance, certificates, exams, enrollments])
+  }, [compliance, certificates, exams, enrollments, interventionTasks, reviewRecords])
 
   const recentReminders = useMemo(() => {
     return [...reminders]
@@ -82,6 +104,31 @@ export default function HRDashboard() {
       )
       .slice(0, 5)
   }, [reminders])
+
+  const recentInterventions = useMemo(() => {
+    return [...interventionTasks]
+      .sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+      .slice(0, 6)
+  }, [interventionTasks])
+
+  const getTriggerTypeLabel = (type: string) => {
+    switch (type) {
+      case 'cert_expiring':
+        return { label: '证书临期', variant: 'warning' as const }
+      case 'cert_expired':
+        return { label: '证书过期', variant: 'danger' as const }
+      case 'exam_fail_repeated':
+        return { label: '多次考试未过', variant: 'warning' as const }
+      case 'required_course_gap':
+        return { label: '必修课程缺口', variant: 'default' as const }
+      case 'required_cert_gap':
+        return { label: '必修证书缺口', variant: 'danger' as const }
+      default:
+        return { label: type, variant: 'default' as const }
+    }
+  }
 
   const getReminderTypeLabel = (type: string) => {
     switch (type) {
@@ -115,7 +162,7 @@ export default function HRDashboard() {
   return (
     <AppLayout>
       <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <StatCard
             title="员工达标率"
             value={stats.employeeComplianceRate}
@@ -144,9 +191,23 @@ export default function HRDashboard() {
             variant="default"
             trend={`${enrollments.filter(e => e.progress === 100).length}/${enrollments.length} 门课程完成`}
           />
+          <StatCard
+            title="待处理干预任务"
+            value={stats.pendingInterventions}
+            icon={ShieldCheck}
+            variant="danger"
+            trend={`${interventionTasks.length} 条总任务`}
+          />
+          <StatCard
+            title="复核通过率"
+            value={stats.reviewPassRate}
+            icon={History}
+            variant="success"
+            trend={`${reviewRecords.filter(r => r.result === 'pass').length}/${reviewRecords.length} 条复核通过`}
+          />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="bg-white rounded-lg shadow-sm border border-slate-200">
             <div className="px-6 py-4 border-b border-slate-200">
               <h3 className="text-base font-semibold text-slate-800 flex items-center gap-2">
@@ -186,6 +247,49 @@ export default function HRDashboard() {
                         </div>
                       </div>
                       <Badge variant={typeInfo.variant}>{typeInfo.label}</Badge>
+                    </div>
+                  )
+                })
+              )}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm border border-slate-200">
+            <div className="px-6 py-4 border-b border-slate-200">
+              <h3 className="text-base font-semibold text-slate-800 flex items-center gap-2">
+                <AlertTriangle size={18} className="text-[#ef4444]" />
+                最近干预任务
+              </h3>
+            </div>
+            <div className="divide-y divide-slate-100">
+              {recentInterventions.length === 0 ? (
+                <div className="px-6 py-8 text-center text-slate-500">
+                  暂无干预任务
+                </div>
+              ) : (
+                recentInterventions.map((task) => {
+                  const typeInfo = getTriggerTypeLabel(task.triggerType)
+                  return (
+                    <div
+                      key={task.id}
+                      className="px-6 py-3 hover:bg-slate-50 transition-colors"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Badge variant={typeInfo.variant}>{typeInfo.label}</Badge>
+                            <span className="text-xs text-slate-500">
+                              P{task.priority}
+                            </span>
+                          </div>
+                          <p className="text-sm font-medium text-slate-800 truncate">
+                            {task.userName}
+                          </p>
+                          <p className="text-xs text-slate-500 truncate">
+                            {task.triggerDescription}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   )
                 })

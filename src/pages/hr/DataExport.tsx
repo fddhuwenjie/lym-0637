@@ -11,25 +11,27 @@ import {
   Award,
   Bell,
   Download,
+  AlertTriangle,
+  History,
 } from 'lucide-react'
 
 const exportButtons = [
   {
-    type: 'position_compliance',
+    type: 'compliance',
     label: '岗位达标报告',
     icon: ClipboardCheck,
     description: '导出所有员工的岗位达标情况',
     variant: 'bg-[#1e3a5f] hover:bg-[#163049]',
   },
   {
-    type: 'exam_scores',
+    type: 'exams',
     label: '考试成绩报告',
     icon: FileText,
     description: '导出所有考试成绩明细',
     variant: 'bg-[#0ea5e9] hover:bg-[#0284c7]',
   },
   {
-    type: 'certificate_status',
+    type: 'certificates',
     label: '证书状态报告',
     icon: Award,
     description: '导出所有证书的有效期状态',
@@ -41,6 +43,41 @@ const exportButtons = [
     icon: Bell,
     description: '导出所有到期提醒记录',
     variant: 'bg-[#f59e0b] hover:bg-[#d97706]',
+  },
+  {
+    type: 'interventions',
+    label: '干预明细',
+    icon: AlertTriangle,
+    description: '导出学习干预任务明细',
+    variant: 'bg-[#ef4444] hover:bg-[#dc2626]',
+  },
+  {
+    type: 'reviews',
+    label: '复核记录',
+    icon: History,
+    description: '导出证书与考试复核记录',
+    variant: 'bg-[#8b5cf6] hover:bg-[#7c3aed]',
+  },
+  {
+    type: 'positions',
+    label: '岗位配置',
+    icon: ClipboardCheck,
+    description: '导出所有岗位配置信息',
+    variant: 'bg-[#0891b2] hover:bg-[#0e7490]',
+  },
+  {
+    type: 'courses',
+    label: '课程数据',
+    icon: FileText,
+    description: '导出所有课程信息',
+    variant: 'bg-[#059669] hover:bg-[#047857]',
+  },
+  {
+    type: 'users',
+    label: '用户数据',
+    icon: Award,
+    description: '导出所有用户信息',
+    variant: 'bg-[#4f46e5] hover:bg-[#4338ca]',
   },
 ]
 
@@ -57,22 +94,16 @@ export default function DataExport() {
     loadExportHistory()
   }, [loadExportHistory])
 
-  const handleExport = async (type: string) => {
+  const handleExport = (type: string) => {
     setExporting(type)
     try {
-      const res = await exportApi.exportData(type)
-      if (res.success && res.data) {
-        const link = document.createElement('a')
-        link.href = res.data.url
-        link.download = res.data.filename
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        await loadExportHistory()
-      } else {
-        alert(res.error || '导出失败')
-      }
-    } finally {
+      exportApi.downloadExport(type)
+      setTimeout(() => {
+        loadExportHistory()
+        setExporting(null)
+      }, 1000)
+    } catch {
+      alert('导出失败')
       setExporting(null)
     }
   }
@@ -131,7 +162,7 @@ export default function DataExport() {
           <h2 className="text-xl font-semibold text-slate-800">数据导出</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {exportButtons.map((btn) => {
             const Icon = btn.icon
             const isExporting = exporting === btn.type

@@ -1,0 +1,75 @@
+[
+  {
+    "id": "rule1",
+    "triggerType": "cert_expiring",
+    "triggerValue": 30,
+    "actions": [
+      "notify",
+      "assign_course"
+    ],
+    "description": "证书到期前30天触发：通知员工并分配复习课程",
+    "enabled": true,
+    "priority": 1
+  },
+  {
+    "id": "rule2",
+    "triggerType": "cert_expiring",
+    "triggerValue": 7,
+    "actions": [
+      "notify",
+      "schedule_review",
+      "manual_review"
+    ],
+    "description": "证书到期前7天触发：紧急通知、安排复核并人工审核",
+    "enabled": true,
+    "priority": 2
+  },
+  {
+    "id": "rule3",
+    "triggerType": "cert_expired",
+    "actions": [
+      "notify",
+      "manual_review",
+      "assign_exam"
+    ],
+    "description": "证书过期触发：通知、人工审核并安排补考",
+    "enabled": true,
+    "priority": 3
+  },
+  {
+    "id": "rule4",
+    "triggerType": "exam_fail_repeated",
+    "triggerValue": 2,
+    "actions": [
+      "notify",
+      "assign_course",
+      "manual_review"
+    ],
+    "description": "连续2次考试未通过触发：通知、重新分配学习、人工审核",
+    "enabled": true,
+    "priority": 2
+  },
+  {
+    "id": "rule5",
+    "triggerType": "required_course_gap",
+    "actions": [
+      "notify",
+      "assign_course"
+    ],
+    "description": "岗位必修课程缺口触发：通知并分配课程",
+    "enabled": true,
+    "priority": 1
+  },
+  {
+    "id": "rule6",
+    "triggerType": "required_cert_gap",
+    "actions": [
+      "notify",
+      "assign_course",
+      "assign_exam"
+    ],
+    "description": "岗位必修证书缺口触发：通知、分配课程与考试",
+    "enabled": true,
+    "priority": 2
+  }
+]

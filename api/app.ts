@@ -18,6 +18,10 @@ import certificateRoutes from './routes/certificates.js'
 import reminderRoutes from './routes/reminders.js'
 import complianceRoutes from './routes/compliance.js'
 import exportRoutes from './routes/export.js'
+import interventionRuleRoutes from './routes/interventionRules.js'
+import positionCertConfigRoutes from './routes/positionCertConfigs.js'
+import interventionTaskRoutes from './routes/interventionTasks.js'
+import reviewRecordRoutes from './routes/reviewRecords.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -41,6 +45,10 @@ app.use('/api/certificates', certificateRoutes)
 app.use('/api/reminders', reminderRoutes)
 app.use('/api/compliance', complianceRoutes)
 app.use('/api/export', exportRoutes)
+app.use('/api/intervention-rules', interventionRuleRoutes)
+app.use('/api/position-cert-configs', positionCertConfigRoutes)
+app.use('/api/intervention-tasks', interventionTaskRoutes)
+app.use('/api/review-records', reviewRecordRoutes)
 
 app.use(
   '/api/health',

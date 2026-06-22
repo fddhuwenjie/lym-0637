@@ -1,6 +1,11 @@
 import express, { type Request, type Response } from 'express';
 import { loadAllData, saveAllData, genId } from '../services/dataStore.js';
-import { getAllCompliance, toCSV } from '../services/businessService.js';
+import {
+  getAllCompliance,
+  toCSV,
+  buildInterventionExportRows,
+  buildReviewExportRows,
+} from '../services/businessService.js';
 
 const router = express.Router();
 
@@ -13,7 +18,9 @@ type ExportType =
   | 'exams'
   | 'certificates'
   | 'reminders'
-  | 'compliance';
+  | 'compliance'
+  | 'interventions'
+  | 'reviews';
 
 const VALID_TYPES: ExportType[] = [
   'positions',
@@ -25,6 +32,8 @@ const VALID_TYPES: ExportType[] = [
   'certificates',
   'reminders',
   'compliance',
+  'interventions',
+  'reviews',
 ];
 
 function buildRows(type: ExportType, data: ReturnType<typeof loadAllData>): Record<string, any>[] {
@@ -126,6 +135,10 @@ function buildRows(type: ExportType, data: ReturnType<typeof loadAllData>): Reco
           .join(';'),
       }));
     }
+    case 'interventions':
+      return buildInterventionExportRows(data);
+    case 'reviews':
+      return buildReviewExportRows(data);
   }
 }
 
