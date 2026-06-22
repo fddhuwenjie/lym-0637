@@ -1,0 +1,32 @@
+[
+  {
+    "id": "cert1",
+    "userId": "u_e1",
+    "courseId": "c_safety",
+    "examAttemptId": "ex1",
+    "issuedAt": "2026-05-23T01:27:01.302Z",
+    "expiresAt": "2027-05-23T01:27:01.302Z",
+    "status": "valid",
+    "version": 1
+  },
+  {
+    "id": "cert2",
+    "userId": "u_e2",
+    "courseId": "c_safety",
+    "examAttemptId": "ex2",
+    "issuedAt": "2026-05-08T01:27:01.302Z",
+    "expiresAt": "2026-07-12T01:27:01.302Z",
+    "status": "expiring",
+    "version": 1
+  },
+  {
+    "id": "cert3",
+    "userId": "u_e2",
+    "courseId": "c_quality",
+    "examAttemptId": "ex3",
+    "issuedAt": "2026-05-13T01:27:01.302Z",
+    "expiresAt": "2026-06-12T01:27:01.302Z",
+    "status": "expired",
+    "version": 1
+  }
+]

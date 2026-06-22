@@ -1,0 +1,42 @@
+[
+  {
+    "id": "en1",
+    "userId": "u_e1",
+    "courseId": "c_safety",
+    "progress": 100,
+    "enrolledAt": "2026-05-13T01:27:01.301Z",
+    "completedAt": "2026-05-23T01:27:01.301Z"
+  },
+  {
+    "id": "en2",
+    "userId": "u_e1",
+    "courseId": "c_fire",
+    "progress": 60,
+    "enrolledAt": "2026-06-02T01:27:01.301Z",
+    "completedAt": null
+  },
+  {
+    "id": "en3",
+    "userId": "u_e2",
+    "courseId": "c_safety",
+    "progress": 100,
+    "enrolledAt": "2026-05-03T01:27:01.301Z",
+    "completedAt": "2026-05-08T01:27:01.301Z"
+  },
+  {
+    "id": "en4",
+    "userId": "u_e2",
+    "courseId": "c_quality",
+    "progress": 100,
+    "enrolledAt": "2026-05-03T01:27:01.301Z",
+    "completedAt": "2026-05-13T01:27:01.301Z"
+  },
+  {
+    "id": "en5",
+    "userId": "u_e3",
+    "courseId": "c_safety",
+    "progress": 30,
+    "enrolledAt": "2026-06-12T01:27:01.301Z",
+    "completedAt": null
+  }
+]

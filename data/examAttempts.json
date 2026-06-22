@@ -1,0 +1,161 @@
+[
+  {
+    "id": "ex1",
+    "userId": "u_e1",
+    "courseId": "c_safety",
+    "questionVersion": 1,
+    "questionIds": [
+      "q1",
+      "q2",
+      "q3",
+      "q4",
+      "q5"
+    ],
+    "answers": [
+      {
+        "questionId": "q1",
+        "selectedAnswers": [
+          0
+        ]
+      },
+      {
+        "questionId": "q2",
+        "selectedAnswers": [
+          0,
+          1,
+          3
+        ]
+      },
+      {
+        "questionId": "q3",
+        "selectedAnswers": [
+          0
+        ]
+      },
+      {
+        "questionId": "q4",
+        "selectedAnswers": [
+          3
+        ]
+      },
+      {
+        "questionId": "q5",
+        "selectedAnswers": [
+          0
+        ]
+      }
+    ],
+    "score": 100,
+    "passed": true,
+    "attemptNumber": 1,
+    "submitted": true,
+    "startedAt": "2026-05-23T01:27:01.302Z",
+    "submittedAt": "2026-05-23T01:27:01.302Z"
+  },
+  {
+    "id": "ex2",
+    "userId": "u_e2",
+    "courseId": "c_safety",
+    "questionVersion": 1,
+    "questionIds": [
+      "q1",
+      "q2",
+      "q3",
+      "q4",
+      "q5"
+    ],
+    "answers": [
+      {
+        "questionId": "q1",
+        "selectedAnswers": [
+          0
+        ]
+      },
+      {
+        "questionId": "q2",
+        "selectedAnswers": [
+          0,
+          1,
+          3
+        ]
+      },
+      {
+        "questionId": "q3",
+        "selectedAnswers": [
+          0
+        ]
+      },
+      {
+        "questionId": "q4",
+        "selectedAnswers": [
+          0
+        ]
+      },
+      {
+        "questionId": "q5",
+        "selectedAnswers": [
+          0
+        ]
+      }
+    ],
+    "score": 80,
+    "passed": true,
+    "attemptNumber": 1,
+    "submitted": true,
+    "startedAt": "2026-05-08T01:27:01.302Z",
+    "submittedAt": "2026-05-08T01:27:01.302Z"
+  },
+  {
+    "id": "ex3",
+    "userId": "u_e2",
+    "courseId": "c_quality",
+    "questionVersion": 1,
+    "questionIds": [
+      "q11",
+      "q12",
+      "q13",
+      "q14",
+      "q15"
+    ],
+    "answers": [
+      {
+        "questionId": "q11",
+        "selectedAnswers": [
+          2
+        ]
+      },
+      {
+        "questionId": "q12",
+        "selectedAnswers": [
+          0,
+          1,
+          2
+        ]
+      },
+      {
+        "questionId": "q13",
+        "selectedAnswers": [
+          0
+        ]
+      },
+      {
+        "questionId": "q14",
+        "selectedAnswers": [
+          3
+        ]
+      },
+      {
+        "questionId": "q15",
+        "selectedAnswers": [
+          3
+        ]
+      }
+    ],
+    "score": 100,
+    "passed": true,
+    "attemptNumber": 2,
+    "submitted": true,
+    "startedAt": "2026-05-13T01:27:01.302Z",
+    "submittedAt": "2026-05-13T01:27:01.302Z"
+  }
+]

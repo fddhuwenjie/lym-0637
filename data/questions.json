@@ -1,0 +1,271 @@
+[
+  {
+    "id": "q1",
+    "courseId": "c_safety",
+    "type": "single",
+    "content": "安全生产的方针是什么？",
+    "options": [
+      "安全第一、预防为主",
+      "生产第一、安全为辅",
+      "效益优先",
+      "质量第一"
+    ],
+    "correctAnswers": [
+      0
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  },
+  {
+    "id": "q2",
+    "courseId": "c_safety",
+    "type": "multiple",
+    "content": "以下哪些属于个人防护用品？",
+    "options": [
+      "安全帽",
+      "安全带",
+      "手机",
+      "护目镜"
+    ],
+    "correctAnswers": [
+      0,
+      1,
+      3
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  },
+  {
+    "id": "q3",
+    "courseId": "c_safety",
+    "type": "judge",
+    "content": "发现安全隐患应立即报告。",
+    "options": [
+      "正确",
+      "错误"
+    ],
+    "correctAnswers": [
+      0
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  },
+  {
+    "id": "q4",
+    "courseId": "c_safety",
+    "type": "single",
+    "content": "事故处理的\"四不放过\"原则不包括？",
+    "options": [
+      "原因未查清不放过",
+      "责任人未处理不放过",
+      "整改措施未落实不放过",
+      "损失未挽回不放过"
+    ],
+    "correctAnswers": [
+      3
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  },
+  {
+    "id": "q5",
+    "courseId": "c_safety",
+    "type": "single",
+    "content": "三级安全教育是指？",
+    "options": [
+      "厂级、车间级、班组级",
+      "国家级、省级、市级",
+      "初级、中级、高级",
+      "以上都不对"
+    ],
+    "correctAnswers": [
+      0
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  },
+  {
+    "id": "q6",
+    "courseId": "c_fire",
+    "type": "single",
+    "content": "电器着火应使用哪种灭火器？",
+    "options": [
+      "水基型",
+      "干粉",
+      "泡沫",
+      "任意类型"
+    ],
+    "correctAnswers": [
+      1
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  },
+  {
+    "id": "q7",
+    "courseId": "c_fire",
+    "type": "multiple",
+    "content": "火灾逃生的正确做法有？",
+    "options": [
+      "用湿毛巾捂住口鼻",
+      "乘坐电梯快速撤离",
+      "弯腰低姿前行",
+      "贪恋财物返回"
+    ],
+    "correctAnswers": [
+      0,
+      2
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  },
+  {
+    "id": "q8",
+    "courseId": "c_fire",
+    "type": "judge",
+    "content": "发现火灾应先尝试扑救，不行再报警。",
+    "options": [
+      "正确",
+      "错误"
+    ],
+    "correctAnswers": [
+      1
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  },
+  {
+    "id": "q9",
+    "courseId": "c_fire",
+    "type": "single",
+    "content": "灭火器压力表指针在哪个区域表示正常？",
+    "options": [
+      "红色区",
+      "黄色区",
+      "绿色区",
+      "黑色区"
+    ],
+    "correctAnswers": [
+      2
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  },
+  {
+    "id": "q10",
+    "courseId": "c_fire",
+    "type": "single",
+    "content": "燃烧三要素不包括？",
+    "options": [
+      "可燃物",
+      "助燃物",
+      "点火源",
+      "氧气"
+    ],
+    "correctAnswers": [
+      3
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  },
+  {
+    "id": "q11",
+    "courseId": "c_quality",
+    "type": "single",
+    "content": "ISO9001的最新版本是？",
+    "options": [
+      "ISO9001:2000",
+      "ISO9001:2008",
+      "ISO9001:2015",
+      "ISO9001:2020"
+    ],
+    "correctAnswers": [
+      2
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  },
+  {
+    "id": "q12",
+    "courseId": "c_quality",
+    "type": "multiple",
+    "content": "质量管理七项原则包括？",
+    "options": [
+      "以顾客为关注焦点",
+      "领导作用",
+      "全员参与",
+      "经验主义"
+    ],
+    "correctAnswers": [
+      0,
+      1,
+      2
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  },
+  {
+    "id": "q13",
+    "courseId": "c_quality",
+    "type": "judge",
+    "content": "PDCA循环是质量改进的基本方法。",
+    "options": [
+      "正确",
+      "错误"
+    ],
+    "correctAnswers": [
+      0
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  },
+  {
+    "id": "q14",
+    "courseId": "c_quality",
+    "type": "single",
+    "content": "以下哪个不是\"5M1E\"因素？",
+    "options": [
+      "人(Man)",
+      "机(Machine)",
+      "料(Material)",
+      "金钱(Money)"
+    ],
+    "correctAnswers": [
+      3
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  },
+  {
+    "id": "q15",
+    "courseId": "c_quality",
+    "type": "single",
+    "content": "QC七大手法不包括？",
+    "options": [
+      "柏拉图",
+      "鱼骨图",
+      "直方图",
+      "财务报表"
+    ],
+    "correctAnswers": [
+      3
+    ],
+    "version": 1,
+    "createdAt": "2026-04-23T01:27:01.301Z",
+    "updatedAt": "2026-04-23T01:27:01.301Z"
+  }
+]

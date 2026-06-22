@@ -1,0 +1,18 @@
+[
+  {
+    "id": "r1",
+    "userId": "u_e2",
+    "certificateId": "cert2",
+    "type": "expiring_30d",
+    "sentAt": "2026-06-12T01:27:01.302Z",
+    "acknowledged": false
+  },
+  {
+    "id": "r2",
+    "userId": "u_e2",
+    "certificateId": "cert3",
+    "type": "expired",
+    "sentAt": "2026-06-12T01:27:01.302Z",
+    "acknowledged": false
+  }
+]

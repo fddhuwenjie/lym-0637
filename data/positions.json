@@ -1,0 +1,29 @@
+[
+  {
+    "id": "pos_1",
+    "name": "安全工程师",
+    "description": "负责生产安全管理",
+    "maxRetakeCount": 2,
+    "requiredCourseIds": [
+      "c_safety",
+      "c_fire"
+    ],
+    "requiredCertificateCourseIds": [
+      "c_safety",
+      "c_fire"
+    ]
+  },
+  {
+    "id": "pos_2",
+    "name": "质量管理员",
+    "description": "负责产品质量控制",
+    "maxRetakeCount": 3,
+    "requiredCourseIds": [
+      "c_quality",
+      "c_safety"
+    ],
+    "requiredCertificateCourseIds": [
+      "c_quality"
+    ]
+  }
+]

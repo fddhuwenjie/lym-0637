@@ -1,0 +1,30 @@
+[
+  {
+    "id": "u_hr1",
+    "name": "张经理",
+    "role": "hr",
+    "positionId": null,
+    "avatar": "👨‍💼"
+  },
+  {
+    "id": "u_e1",
+    "name": "李明",
+    "role": "employee",
+    "positionId": "pos_1",
+    "avatar": "👨‍💻"
+  },
+  {
+    "id": "u_e2",
+    "name": "王芳",
+    "role": "employee",
+    "positionId": "pos_2",
+    "avatar": "👩‍💻"
+  },
+  {
+    "id": "u_e3",
+    "name": "陈伟",
+    "role": "employee",
+    "positionId": "pos_1",
+    "avatar": "🧑‍💻"
+  }
+]

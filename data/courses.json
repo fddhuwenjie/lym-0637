@@ -1,0 +1,38 @@
+[
+  {
+    "id": "c_safety",
+    "name": "安全生产基础",
+    "description": "企业安全生产基础知识培训",
+    "content": "第一章：安全生产概述\n第二章：安全生产法律法规\n第三章：事故预防与应急处理\n第四章：职业健康与防护",
+    "credit": 4,
+    "passingScore": 60,
+    "questionCount": 5,
+    "certificateValidDays": 365,
+    "reminderDays": 30,
+    "createdAt": "2026-04-23T01:27:01.300Z"
+  },
+  {
+    "id": "c_fire",
+    "name": "消防安全培训",
+    "description": "消防知识与应急演练",
+    "content": "第一章：火灾预防\n第二章：灭火器材使用\n第三章：逃生与自救\n第四章：消防法规",
+    "credit": 3,
+    "passingScore": 70,
+    "questionCount": 5,
+    "certificateValidDays": 365,
+    "reminderDays": 30,
+    "createdAt": "2026-04-23T01:27:01.300Z"
+  },
+  {
+    "id": "c_quality",
+    "name": "质量管理体系",
+    "description": "ISO质量管理体系基础",
+    "content": "第一章：质量管理概述\n第二章：ISO9001标准解读\n第三章：质量控制工具\n第四章：持续改进",
+    "credit": 5,
+    "passingScore": 60,
+    "questionCount": 5,
+    "certificateValidDays": 730,
+    "reminderDays": 60,
+    "createdAt": "2026-04-23T01:27:01.300Z"
+  }
+]
